@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PM230 Label-Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">PM230 <span>Label-Studio</span></div>
+  <div class="stat" id="stat">Verbindung wird gepr&uuml;ft &hellip;</div>
+  <div class="top">
+    <label>Papier
+      <select id="paperPreset">
+        <option value="54x25">54 &times; 25 mm</option>
+        <option value="54x40">54 &times; 40 mm</option>
+        <option value="54x60">54 &times; 60 mm</option>
+        <option value="54a" selected>54 mm Endlos (Höhe automatisch)</option>
+      </select>
+    </label>
+    <label>H&ouml;he mm <input id="heightMM" type="number" min="5" max="400" step="1" value="40"></label>
+    <label>Schw&auml;rze <input id="density" type="range" min="0" max="15" value="10"><b id="densityVal">10</b></label>
+    <label>Kopien <input id="copies" type="number" min="1" max="99" value="1"></label>
+    <label class="chk"><input type="checkbox" id="dither" checked> Weichzeichnung</label>
+    <label class="chk"><input type="checkbox" id="invert"> invertiert</label>
+    <button id="printBtn" class="primary">Drucken</button>
+  </div>
+</header>
+
+<main>
+  <aside id="left">
+    <h3>Einf&uuml;gen</h3>
+    <div class="row">
+      <button data-add="text">Text</button>
+      <button data-add="img">Bild</button>
+      <button data-add="pdf">PDF</button>
+    </div>
+    <input type="file" id="filePick" accept="image/*,.pdf" hidden multiple>
+    <h3>Ebenen</h3>
+    <select id="layers" size="7"></select>
+    <div class="row">
+      <button id="dup">duplizieren</button>
+      <button id="del">l&ouml;schen</button>
+    </div>
+    <div class="row">
+      <button id="front">nach vorne</button>
+      <button id="back">nach hinten</button>
+    </div>
+    <p class="hint">Pfeiltasten = 1&nbsp;mm, mit Shift = 0,1&nbsp;mm.<br>Entf l&ouml;scht, Strg+D dupliziert.<br>Dateien (PNG/JPG/PDF) einfach hierher ziehen.</p>
+  </aside>
+
+  <section id="stage">
+    <div id="paperWrap"><canvas id="cv"></canvas></div>
+    <div id="stageBar">
+      <label>Zoom <input id="zoom" type="range" min="1" max="6" step="0.5" value="2.5"><b id="zoomVal">2.5&times;</b></label>
+      <span id="paperInfo"></span>
+      <span class="grow"></span>
+      <button data-fit="width">volle Breite</button>
+      <button data-fit="page">auf Feld</button>
+      <button id="snapToggle" class="on">am Raster fangen</button>
+    </div>
+  </section>
+
+  <aside id="right">
+    <div id="propsText">
+      <h3>Text</h3>
+      <textarea id="txt" rows="3" placeholder="Text eingeben"></textarea>
+      <label>Schrift <select id="font"></select></label>
+      <div class="row">
+        <label>Gr&ouml;&szlig;e mm <input id="sizeMM" type="number" step="0.5" min="1" max="60" value="6"></label>
+        <label class="chk"><input type="checkbox" id="bold"> fett</label>
+      </div>
+      <label>Zeilenabstand <input id="lh" type="range" min="0.8" max="2.5" step="0.05" value="1.2"><b id="lhVal">1.20</b></label>
+      <div class="seg" id="align">
+        <button data-a="left">links</button>
+        <button data-a="center">Mitte</button>
+        <button data-a="right">rechts</button>
+      </div>
+    </div>
+
+    <div id="propsImg">
+      <h3>Bild / Seite</h3>
+      <div class="row">
+        <label>Breite mm <input id="imgW" type="number" step="0.5" min="1"></label>
+        <label>H&ouml;he mm <input id="imgH" type="number" step="0.5" min="1"></label>
+      </div>
+      <label class="chk"><input type="checkbox" id="keepAspect" checked> Seitenverh&auml;ltnis halten</label>
+      <label>Kontrast <input id="contrast" type="range" min="0.4" max="2.5" step="0.05" value="1"><b id="contrastVal">1.00</b></label>
+      <div class="row" id="pdfRow" hidden>
+        <button id="pdfPrev">&#9664; Seite</button><b id="pdfPage">1</b><button id="pdfNext">Seite &#9654;</button>
+      </div>
+    </div>
+
+    <h3>Drehen &amp; Position</h3>
+    <label>Drehung &deg; <input id="rot" type="range" min="0" max="359" step="1" value="0"><b id="rotVal">0&deg;</b></label>
+    <div class="grid3">
+      <button data-pos="tl">&#8598;</button><button data-pos="tc">mittig&nbsp;hoch</button><button data-pos="tr">&#8600;</button>
+      <button data-pos="ml">links</button><button data-pos="cc">zentriert</button><button data-pos="mr">rechts</button>
+      <button data-pos="bl">&#8601;</button><button data-pos="bc">mittig&nbsp;runter</button><button data-pos="br">&#8603;</button>
+    </div>
+    <div class="row">
+      <label>x mm <input id="posX" type="number" step="0.5"></label>
+      <label>y mm <input id="posY" type="number" step="0.5"></label>
+    </div>
+    <p class="hint">Das Druckfeld ist 48&nbsp;mm breit (384 dots, 203&nbsp;dpi). Grau au&szlig;halb = Papier, das der Druckkopf nicht erreicht.</p>
+  </aside>
+</main>
+
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

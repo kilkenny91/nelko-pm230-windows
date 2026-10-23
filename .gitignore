@@ -1,0 +1,17 @@
+# Build-Erzeugnisse und Analyse-Funde
+*.exe
+!dist/*.exe
+*.obj
+*.bin
+*.log
+src/iconwork/
+src/prev.png
+src/testimg.png
+src/test.pdf
+ref/
+analysis/
+dist/*.zip
+src/ref.job
+test.pdf
+src/BleWatch.cs
+src/BtProbe.cs
